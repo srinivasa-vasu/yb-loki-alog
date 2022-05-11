@@ -5,11 +5,11 @@ server:
   grpc_listen_port: 9096
 
 common:
-  path_prefix: ${GITPOD_REPO_ROOT}/loki
+  path_prefix: ./
   storage:
     filesystem:
-      chunks_directory: ${GITPOD_REPO_ROOT}/loki/chunks
-      rules_directory: ${GITPOD_REPO_ROOT}/loki/rules
+      chunks_directory: ./chunks
+      rules_directory: ./rules
   replication_factor: 1
   ring:
     instance_addr: 127.0.0.1

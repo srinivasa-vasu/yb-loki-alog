@@ -25,7 +25,7 @@ tasks:
       rm ./grafana.tar.gz
       sudo mv ./loki /usr/local/bin/loki
     command: |
-      ${GITPOD_REPO_ROOT}/grafana/bin/grafana-server web
+      ${GITPOD_REPO_ROOT}/grafana/bin/grafana-server -homepath ${GITPOD_REPO_ROOT}/grafana  web
 
   - name: 1c-loki
     env:
@@ -37,7 +37,8 @@ tasks:
       rm ./loki.zip
       chmod +x ./loki/loki
     command: |
-      ${GITPOD_REPO_ROOT}/loki/loki --config.file=loki-config.yml
+      cd ${GITPOD_REPO_ROOT}/loki
+      ./loki --config.file=loki-config.yml
 
   - name: 1d-promtail
     env:
@@ -51,4 +52,5 @@ tasks:
     command: |
       gp await-port 3100
       gp sync-await ysql-init
-      ${GITPOD_REPO_ROOT}/promtail/promtail -config.file=promtail-config.yml
+      cd ${GITPOD_REPO_ROOT}/promtail
+      ./promtail -config.file=promtail-config.yml

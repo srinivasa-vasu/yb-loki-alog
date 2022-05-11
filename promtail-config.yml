@@ -3,7 +3,7 @@ server:
   grpc_listen_port: 0
 
 positions:
-  filename: ${GITPOD_REPO_ROOT}/promtail/positions.yaml
+  filename: ./positions.yaml
 
 clients:
   - url: http://localhost:3100/loki/api/v1/push

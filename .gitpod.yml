@@ -1,0 +1,54 @@
+image: gitpod/workspace-full
+
+tasks:
+  - name: 1a-yb
+    before: |
+      yugabyted start --base_dir=$STORE/ybd1 --listen=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1a" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1a"
+      yugabyted start --base_dir=$STORE/ybd2 --listen=$HOST_LB2 --join=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1b" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1b"
+      yugabyted start --base_dir=$STORE/ybd3 --listen=$HOST_LB3 --join=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1c" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1c"
+    command: |
+      yb-admin -master_addresses $HOST_LB:7100,$HOST_LB2:7100,$HOST_LB3:7100 modify_placement_info ybcloud.ap-south-1.ap-south-1a,ybcloud.ap-south-1.ap-south-1b,ybcloud.ap-south-1.ap-south-1c 3
+      gp sync-done ysql-init
+  - name: shell
+    command: |
+      gp await-port 5433
+      ysqlsh
+
+  - name: 1b-grafana
+    env:
+      GRAFANA_VERSION: "8.5.2"
+    before: |
+      mkdir -p ${GITPOD_REPO_ROOT}/grafana
+      curl -sSLo ./grafana.tar.gz https://dl.grafana.com/enterprise/release/grafana-enterprise-${GRAFANA_VERSION}.linux-amd64.tar.gz
+      tar -xvf grafana.tar.gz -C ${GITPOD_REPO_ROOT}/grafana --strip-components=1
+      chmod +x ${GITPOD_REPO_ROOT}/grafana/bin/*
+      rm ./grafana.tar.gz
+      sudo mv ./loki /usr/local/bin/loki
+    command: |
+      ${GITPOD_REPO_ROOT}/grafana/bin/grafana-server web
+
+  - name: 1c-loki
+    env:
+      LOKI_VERSION: "v2.5.0"
+    before: |
+      mkdir -p ${GITPOD_REPO_ROOT}/loki
+      curl -sSLo ./loki.zip https://github.com/grafana/loki/releases/download/${LOKI_VERSION}/loki-linux-amd64.zip
+      unzip -p ./loki.zip > ./loki/loki
+      rm ./loki.zip
+      chmod +x ./loki/loki
+    command: |
+      ${GITPOD_REPO_ROOT}/loki/loki --config.file=loki-config.yml
+
+  - name: 1d-promtail
+    env:
+      PROMTAIL_VERSION: "v2.5.0"
+    before: |
+      mkdir -p ${GITPOD_REPO_ROOT}/promtail
+      curl -sSLo ./promtail.zip https://github.com/grafana/loki/releases/download/v2.5.0/promtail-linux-amd64.zip
+      unzip -p ./promtail.zip > ./promtail/promtail
+      rm ./promtail.zip
+      chmod +x ./promtail/promtail
+    command: |
+      gp await-port 3100
+      gp sync-await ysql-init
+      ${GITPOD_REPO_ROOT}/promtail/promtail -config.file=promtail-config.yml

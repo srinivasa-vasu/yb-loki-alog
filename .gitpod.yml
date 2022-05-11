@@ -2,6 +2,10 @@ image: gitpod/workspace-yugabytedb
 
 tasks:
   - name: 1a-yb
+    env:
+      HOST_LB: "127.0.0.1"
+      HOST_L2: "127.0.0.2"
+      HOST_L3: "127.0.0.3"
     before: |
       yugabyted start --base_dir=$STORE/ybd1 --listen=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1a" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1a"
       yugabyted start --base_dir=$STORE/ybd2 --listen=$HOST_LB2 --join=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1b" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1b"

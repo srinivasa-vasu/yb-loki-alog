@@ -47,6 +47,7 @@ tasks:
   - name: 1d-promtail
     env:
       PROMTAIL_VERSION: "v2.5.0"
+      YB_STORE: ${GITPOD_REPO_ROOT}/ybdb
     before: |
       curl -sSLo ./promtail.zip https://github.com/grafana/loki/releases/download/v2.5.0/promtail-linux-amd64.zip
       unzip -p ./promtail.zip > ./promtail/promtail

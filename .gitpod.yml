@@ -11,10 +11,7 @@ tasks:
       yugabyted start --base_dir=${GITPOD_REPO_ROOT}/ybdb/ybd1 --listen=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1a" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1a"
       yugabyted start --base_dir=${GITPOD_REPO_ROOT}/ybdb/ybd2 --listen=$HOST_LB2 --join=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1b" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1b"
       yugabyted start --base_dir=${GITPOD_REPO_ROOT}/ybdb/ybd3 --listen=$HOST_LB3 --join=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1c" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1c"
-    command: |
       yb-admin -master_addresses $HOST_LB:7100,$HOST_LB2:7100,$HOST_LB3:7100 modify_placement_info ybcloud.ap-south-1.ap-south-1a,ybcloud.ap-south-1.ap-south-1b,ybcloud.ap-south-1.ap-south-1c 3
-      gp sync-done ysql-init
-  - name: shell
     command: |
       gp await-port 5433
       ysqlsh
@@ -30,7 +27,7 @@ tasks:
       cp ${GITPOD_REPO_ROOT}/grafana/loki-ds.yml ${GITPOD_REPO_ROOT}/grafana/conf/provisioning/datasources/loki-ds.yml
     command: |
       cd ${GITPOD_REPO_ROOT}/grafana
-      ./bin/grafana-server -homepath ${GITPOD_REPO_ROOT}/grafana  web
+      ./bin/grafana-server -homepath ${GITPOD_REPO_ROOT}/grafana web
 
   - name: 1c-loki
     env:
@@ -44,7 +41,7 @@ tasks:
       cd ${GITPOD_REPO_ROOT}/loki
       ./loki --config.file=loki-config.yml
 
-  - name: 1d-promtail
+  - name: 2ac-promtail
     env:
       PROMTAIL_VERSION: "v2.5.0"
     before: |
@@ -53,7 +50,6 @@ tasks:
       rm ./promtail.zip
       chmod +x ./promtail/promtail
     command: |
-      gp await-port 3100
-      gp sync-await ysql-init
+      gp await-port 3100 && gp await-port 5433
       cd ${GITPOD_REPO_ROOT}/promtail
       ./promtail -config.expand-env=true -config.file=promtail-config.yml

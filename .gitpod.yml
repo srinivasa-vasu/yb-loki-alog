@@ -23,13 +23,14 @@ tasks:
     env:
       GRAFANA_VERSION: "8.5.2"
     before: |
-      mkdir -p ${GITPOD_REPO_ROOT}/grafana
       curl -sSLo ./grafana.tar.gz https://dl.grafana.com/enterprise/release/grafana-enterprise-${GRAFANA_VERSION}.linux-amd64.tar.gz
       tar -xvf grafana.tar.gz -C ${GITPOD_REPO_ROOT}/grafana --strip-components=1
       chmod +x ${GITPOD_REPO_ROOT}/grafana/bin/*
       rm ./grafana.tar.gz
+      cp ${GITPOD_REPO_ROOT}/grafana/loki-ds.yml ${GITPOD_REPO_ROOT}/grafana/conf/provisioning/datasources/loki-ds.yml
     command: |
-      ${GITPOD_REPO_ROOT}/grafana/bin/grafana-server -homepath ${GITPOD_REPO_ROOT}/grafana  web
+      cd ${GITPOD_REPO_ROOT}/grafana
+      ./bin/grafana-server -homepath ${GITPOD_REPO_ROOT}/grafana  web
 
   - name: 1c-loki
     env:
@@ -55,4 +56,4 @@ tasks:
       gp await-port 3100
       gp sync-await ysql-init
       cd ${GITPOD_REPO_ROOT}/promtail
-      ./promtail -config.file=promtail-config.yml
+      ./promtail -config.expand-env=true -config.file=promtail-config.yml

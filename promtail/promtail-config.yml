@@ -21,7 +21,7 @@ scrape_configs:
     labels:
       export_type: "master_export"
       job: yb_master_n1
-      __path__: $STORE/ybd1/logs/master/yb-master.*log*
+      __path__: $STORE/ybdb/ybd1/logs/master/yb-master.*log*
 - job_name: yb_tserver_n1
   pipeline_stages:
   - regex:
@@ -34,7 +34,7 @@ scrape_configs:
     labels:
       export_type: "tserver_export"
       job: yb_tserver_n1
-      __path__: $STORE/ybd1/logs/tserver/yb-tserver.*log*
+      __path__: $STORE/ybdb/ybd1/logs/tserver/yb-tserver.*log*
 - job_name: yb_postgres_n1
   static_configs:
   - targets:
@@ -42,7 +42,7 @@ scrape_configs:
     labels:
       export_type: "postgres_export"
       job: yb_postgres_n1
-      __path__: $STORE/ybd1/logs/tserver/postgres*.log
+      __path__: $STORE/ybdb/ybd1/logs/tserver/postgres*.log
 - job_name: yb_master_n2
   pipeline_stages:
   - regex:
@@ -55,7 +55,7 @@ scrape_configs:
     labels:
       export_type: "master_export"
       job: yb_master_n2
-      __path__: $STORE/ybd2/logs/master/yb-master.*log*
+      __path__: $STORE/ybdb/ybd2/logs/master/yb-master.*log*
 - job_name: yb_tserver_n2
   pipeline_stages:
   - regex:
@@ -68,7 +68,7 @@ scrape_configs:
     labels:
       export_type: "tserver_export"
       job: yb_tserver_n2
-      __path__: $STORE/ybd2/logs/tserver/yb-tserver.*log*
+      __path__: $STORE/ybdb/ybd2/logs/tserver/yb-tserver.*log*
 - job_name: yb_postgres_n2
   static_configs:
   - targets:
@@ -76,7 +76,7 @@ scrape_configs:
     labels:
       export_type: "postgres_export"
       job: yb_postgres_n2
-      __path__: $STORE/ybd2/logs/tserver/postgres*.log
+      __path__: $STORE/ybdb/ybd2/logs/tserver/postgres*.log
 - job_name: yb_master_n3
   pipeline_stages:
   - regex:
@@ -89,7 +89,7 @@ scrape_configs:
     labels:
       export_type: "master_export"
       job: yb_master_n3
-      __path__: $STORE/ybd3/logs/master/yb-master.*log*
+      __path__: $STORE/ybdb/ybd3/logs/master/yb-master.*log*
 - job_name: yb_tserver_n3
   pipeline_stages:
   - regex:
@@ -102,7 +102,7 @@ scrape_configs:
     labels:
       export_type: "tserver_export"
       job: yb_tserver_n3
-      __path__: $STORE/ybd3/logs/tserver/yb-tserver.*log*
+      __path__: $STORE/ybdb/ybd3/logs/tserver/yb-tserver.*log*
 - job_name: yb_postgres_n3
   static_configs:
   - targets:
@@ -110,4 +110,4 @@ scrape_configs:
     labels:
       export_type: "postgres_export"
       job: yb_postgres_n3
-      __path__: $STORE/ybd3/logs/tserver/postgres*.log
+      __path__: $STORE/ybdb/ybd3/logs/tserver/postgres*.log

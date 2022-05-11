@@ -28,7 +28,6 @@ tasks:
       tar -xvf grafana.tar.gz -C ${GITPOD_REPO_ROOT}/grafana --strip-components=1
       chmod +x ${GITPOD_REPO_ROOT}/grafana/bin/*
       rm ./grafana.tar.gz
-      sudo mv ./loki /usr/local/bin/loki
     command: |
       ${GITPOD_REPO_ROOT}/grafana/bin/grafana-server -homepath ${GITPOD_REPO_ROOT}/grafana  web
 

@@ -12,6 +12,7 @@ tasks:
       yugabyted start --base_dir=${GITPOD_REPO_ROOT}/ybdb/ybd2 --listen=$HOST_LB2 --join=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1b" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1b"
       yugabyted start --base_dir=${GITPOD_REPO_ROOT}/ybdb/ybd3 --listen=$HOST_LB3 --join=$HOST_LB --tserver_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1c" --master_flags="placement_cloud=ybcloud,placement_region=ap-south-1,placement_zone=ap-south-1c"
       yb-admin -master_addresses $HOST_LB:7100,$HOST_LB2:7100,$HOST_LB3:7100 modify_placement_info ybcloud.ap-south-1.ap-south-1a,ybcloud.ap-south-1.ap-south-1b,ybcloud.ap-south-1.ap-south-1c 3
+      gp sync-done ybdb
     command: |
       gp await-port 5433
       ysqlsh
@@ -39,6 +40,7 @@ tasks:
       chmod +x ./loki/loki
     command: |
       cd ${GITPOD_REPO_ROOT}/loki
+      gp sync-await ybdb
       ./loki --config.file=loki-config.yml
 
   - name: 2ac-promtail

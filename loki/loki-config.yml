@@ -14,37 +14,17 @@ common:
   ring:
     instance_addr: 127.0.0.1
     kvstore:
-      store: memberlist
+      store: inmemory
 
-# cassandra to keep the index
 schema_config:
   configs:
-  - from: 2020-05-15
-    store: cassandra
-    object_store: filesystem
-    schema: v11
-    index:
-      prefix: cassandra_table
-      period: 24h
-
-storage_config:
-  cassandra:
-    username: cassandra
-    password: cassandra
-    addresses: 127.0.0.1
-    auth: true
-    keyspace: lokiindex
-
-# file system config
-# schema_config:
-#   configs:
-#     - from: 2020-10-24
-#       store: boltdb-shipper
-#       object_store: filesystem
-#       schema: v11
-#       index:
-#         prefix: index_
-#         period: 24h
+    - from: 2020-10-24
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
 
 ruler:
   alertmanager_url: http://localhost:9093

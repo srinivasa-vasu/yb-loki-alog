@@ -13,8 +13,8 @@ common:
   replication_factor: 1
   ring:
     instance_addr: 127.0.0.1
-    # kvstore:
-    #   store: inmemory
+    kvstore:
+      store: memberlist
 
 # cassandra to keep the index
 schema_config:

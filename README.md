@@ -4,7 +4,7 @@ Log aggregation is an integral part of a distributed system. As the name suggest
 
 In a distributed system like YugabyteDB, where each process generates a ton of runtime log data points, it is precious to aggregate them in one place from an operations perspective. Aggregation helps turn the system-generated data into information that allows operations to manage the product better.
 
-Let's look at aggregating log data from multiple processes of YugabyteDB using a trio of [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/), [Loki](https://grafana.com/docs/loki/latest/), and (Grafana)[https://grafana.com/docs/grafana/latest/getting-started/getting-started/]. Grafana Loki is a log aggregation tool and a data store optimized for efficiently storing and querying log data.
+Let's look at aggregating log data from multiple processes of YugabyteDB using a trio of [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/), [Loki](https://grafana.com/docs/loki/latest/), and [Grafana](https://grafana.com/docs/grafana/latest/getting-started/getting-started/). Grafana Loki is a log aggregation tool and a data store optimized for efficiently storing and querying log data.
 
 “Loki is like Prometheus but for log data”.
 

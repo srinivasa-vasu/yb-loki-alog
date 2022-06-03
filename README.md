@@ -11,3 +11,8 @@ Let's look at aggregating log data from multiple processes of YugabyteDB using a
 Promtail is a data collector agent tailored to Loki that runs on every distributed system node. It discovers the log files on disks and forwards them with labels to Loki. The trio of Promtail, Loki, and Grafana is the ELK equivalent that completes the full log aggregation stack.
 
 ![yb-loki-alog](assets/yb-loki-alog.png)
+
+### devx
+To have a better getting started experience, we have added the Gitpod support to try this out yourself with a single click. You don't need to make any of the infrastructure components. All you need is to fork the source repo and launch the Gitpod terminal using the browser plugin.
+
+![yb-loki-gitpod](assets/yb-loki.gif)

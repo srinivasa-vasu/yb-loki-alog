@@ -1,0 +1,45 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: ./positions.yaml
+
+clients:
+  - url: http://10.0.0.28:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: yb_master_n3a
+  pipeline_stages:
+   - regex:
+       expression: ^\\s*(?P<level>\\w)(?P<date>\\d{2}\\d{2})\\s(?P<timestamp>\\d{2}:\\d{2}:\\d{2}\\.\\d{6})\\s(?P<id>\\d+)\\s(?P<file>.+):(?P<line>\\d+)\\]\\s(?P<message>.*?)\\s*$
+   - labels:
+       level:
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      export_type: "master_export"
+      job: yb_master_n3a
+      __path__: /home/yugabyte/master/logs/yb-master.*log*
+- job_name: yb_tserver_n3a
+  pipeline_stages:
+   - regex:
+       expression: ^\\s*(?P<level>\\w)(?P<date>\\d{2}\\d{2})\\s(?P<timestamp>\\d{2}:\\d{2}:\\d{2}\\.\\d{6})\\s(?P<id>\\d+)\\s(?P<file>.+):(?P<line>\\d+)\\]\\s(?P<message>.*?)\\s*$
+   - labels:
+       level:
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      export_type: "tserver_export"
+      job: yb_tserver_n3a
+      __path__: /home/yugabyte/tserver/logs/yb-tserver.*log*
+- job_name: yb_postgres_n2a
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      export_type: "postgres_export"
+      job: yb_postgres_n3a
+      __path__: /home/yugabyte/tserver/logs/postgres*.log
